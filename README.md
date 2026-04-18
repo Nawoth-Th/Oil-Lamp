@@ -20,7 +20,7 @@ An interactive web application that simulates the traditional Sri Lankan **Pol T
 ## 🛠 Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
+| ----- | ---------- |
 | Framework | Next.js 15 (App Router) |
 | Styling | Tailwind CSS v4 + Vanilla CSS |
 | Animations | Framer Motion |
@@ -32,7 +32,7 @@ An interactive web application that simulates the traditional Sri Lankan **Pol T
 
 ## 📁 Project Structure
 
-```
+```text
 pahana-app/
 ├── app/
 │   ├── globals.css       # Design tokens, animations, base styles
