@@ -16,7 +16,7 @@ export function useLampState(totalWicks: number): LampState {
 
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const host = window.location.hostname;
+    const host = window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname;
     const wsPort = process.env.NEXT_PUBLIC_WS_PORT || '3001';
     const url = `${protocol}://${host}:${wsPort}`;
     let ws: WebSocket;
@@ -51,19 +51,20 @@ export function useLampState(totalWicks: number): LampState {
   }, []);
 
   const lightWick = useCallback((id: number) => {
+    // Optimistic local update: add immediately
+    setLitWicks(prev => new Set([...prev, id]));
+
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify({ type: 'LIGHT_WICK', wickId: id }));
-    } else {
-      // Optimistic local update if WS not connected
-      setLitWicks(prev => new Set([...prev, id]));
     }
   }, []);
 
   const resetWicks = useCallback(() => {
+    // Optimistic local update: clear immediately
+    setLitWicks(new Set());
+
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify({ type: 'RESET' }));
-    } else {
-      setLitWicks(new Set());
     }
   }, []);
 
