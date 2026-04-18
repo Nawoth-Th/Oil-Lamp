@@ -17,7 +17,7 @@ const notoSinhala = Noto_Serif_Sinhala({
 export const metadata: Metadata = {
   title: "Pol Thel Pahana - Segment",
   description:
-    "Celebrate the Sri Lankan New Year 2026 by lighting the traditional Pol Thel Pahana together online. සුභ අලුත් අවුරුද්දක් වේවා!",
+    "Celebrate the Sri Lankan New Year 2026 by lighting the traditional Pol Thel Pahana together online. සුබ අලුත් අවුරුද්දක් වේවා!",
   keywords: ["Awrudu", "Sinhala New Year", "2026", "Oil Lamp", "Pahana", "Sri Lanka"],
 };
 
