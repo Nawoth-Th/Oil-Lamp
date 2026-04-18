@@ -9,7 +9,8 @@ An interactive web application that simulates the traditional Sri Lankan **Pol T
 - **Interactive Oil Lamp** — A real brass lamp image with 7 precise wick points, each individually clickable
 - **Flame Animation** — Smooth flicker animation with glow effect when a wick is lit
 - **Celebration Overlay** — Confetti burst and Sinhala New Year message when all 7 wicks are lit
-- **Live Sync** — WebSocket-based real-time state sharing across multiple users
+- **Live Sync** — Pusher-based real-time state sharing compatible with serverless hosting (Vercel)
+- **State Persistence** — Upstash Redis ensures lit wicks are remembered across sessions and restarts
 - **Background Music** — Toggle traditional Awrudu audio
 - **Progress Bar** — Visual tracker showing how many wicks have been lit
 - **Countdown Timer** — Live countdown to the Sinhala New Year moment (April 13, 2026 at 6:17 AM)
@@ -24,7 +25,8 @@ An interactive web application that simulates the traditional Sri Lankan **Pol T
 | Framework | Next.js 15 (App Router) |
 | Styling | Tailwind CSS v4 + Vanilla CSS |
 | Animations | Framer Motion |
-| Real-time Sync | WebSockets (`ws`) |
+| Real-time Events | Pusher Channels |
+| Persistence | Upstash Redis |
 | Language | TypeScript |
 | Package Manager | pnpm |
 
@@ -35,6 +37,7 @@ An interactive web application that simulates the traditional Sri Lankan **Pol T
 ```text
 pahana-app/
 ├── app/
+│   ├── api/lamp/route.ts # Serverless API (Redis sync + Pusher trigger)
 │   ├── globals.css       # Design tokens, animations, base styles
 │   ├── layout.tsx        # Root layout & metadata
 │   └── page.tsx          # Main page — lamp, countdown, progress, controls
@@ -46,13 +49,12 @@ pahana-app/
 │   ├── ProgressBar.tsx   # Wick lit progress indicator
 │   └── AudioToggle.tsx   # Background music on/off toggle
 ├── hooks/
-│   └── useLampState.ts   # WebSocket state hook (lit wicks sync)
+│   └── useLampState.ts   # Pusher real-time hook (syncs with API)
 ├── public/
 │   ├── lamp.png          # Brass oil lamp source image (500×500px)
 │   ├── header-01.png     # Sinhala title header image
 │   ├── header-02.png     # Awrudu year header image
 │   └── ...               # Audio & other assets
-└── server.ts             # WebSocket server for real-time sync
 ```
 
 ---
@@ -63,6 +65,24 @@ pahana-app/
 
 - Node.js 18+
 - pnpm
+- Pusher Account (Free tier)
+- Upstash Redis Database (Free tier)
+
+### Environment Setup
+
+Create a `.env.local` file in the `pahana-app/` directory and add your keys:
+
+```bash
+# Pusher
+NEXT_PUBLIC_PUSHER_APP_KEY="your-key"
+NEXT_PUBLIC_PUSHER_CLUSTER="your-cluster"
+PUSHER_APP_ID="your-id"
+PUSHER_SECRET="your-secret"
+
+# Upstash Redis
+UPSTASH_REDIS_REST_URL="your-url"
+UPSTASH_REDIS_REST_TOKEN="your-token"
+```
 
 ### Install & Run
 
@@ -70,7 +90,7 @@ pahana-app/
 # Install dependencies
 pnpm install
 
-# Start the development server (Next.js + WebSocket server)
+# Start the development server
 pnpm dev
 ```
 
@@ -90,5 +110,5 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 Light all 7 wicks to complete the ceremony and receive the New Year blessing:
 
-> **සුබ අලුත් අවුරුද්දක් වේවා!**
+> **සුබ අලුත් අවුරුද්දක් වේවා !**
 > *(Wishing you a Happy New Year!)*
