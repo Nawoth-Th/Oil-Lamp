@@ -90,5 +90,5 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 Light all 7 wicks to complete the ceremony and receive the New Year blessing:
 
-> **සුබ අලුත් අවුරුද්දක් වේවා!**
+> **සුබ අලුත් අවුරුද්දක් වේවා !**
 > *(Wishing you a Happy New Year!)*
