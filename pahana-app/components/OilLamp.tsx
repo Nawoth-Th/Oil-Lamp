@@ -8,13 +8,13 @@ import Wick from './Wick';
 // transform: translate(-50%, -100%) anchors the bottom-center of the Wick div
 // exactly on the measured wick-tip pixel.
 const WICK_POSITIONS = [
-  { top: '43.96%', left: '37.06%', transform: 'translate(-50%, -100%)' }, // Wick 1 — x:185.3 y:219.8
-  { top: '48.34%', left: '30.88%', transform: 'translate(-50%, -100%)' }, // Wick 2 — x:154.4 y:241.7
-  { top: '54.26%', left: '34.86%', transform: 'translate(-50%, -100%)' }, // Wick 3 — x:174.3 y:271.3
-  { top: '56.38%', left: '46.20%', transform: 'translate(-50%, -100%)' }, // Wick 4 — x:231.0 y:281.9
-  { top: '52.24%', left: '56.36%', transform: 'translate(-50%, -100%)' }, // Wick 5 — x:281.8 y:261.2
-  { top: '46.68%', left: '56.36%', transform: 'translate(-50%, -100%)' }, // Wick 6 — x:281.8 y:233.4
-  { top: '43.46%', left: '48.12%', transform: 'translate(-50%, -100%)' }, // Wick 7 — x:240.6 y:217.3
+  { top: '48.52%', left: '34.74%', transform: 'translate(-50%, -100%)' }, // Wick 1 — x:173.7 y:242.6
+  { top: '54.14%', left: '38.98%', transform: 'translate(-50%, -100%)' }, // Wick 2 — x:194.9 y:270.7
+  { top: '56.44%', left: '50.00%', transform: 'translate(-50%, -100%)' }, // Wick 3 — x:250.0 y:282.2
+  { top: '52.18%', left: '60.38%', transform: 'translate(-50%, -100%)' }, // Wick 4 — x:301.9 y:260.9
+  { top: '46.62%', left: '60.38%', transform: 'translate(-50%, -100%)' }, // Wick 5 — x:301.9 y:233.1
+  { top: '43.52%', left: '52.26%', transform: 'translate(-50%, -100%)' }, // Wick 6 — x:261.3 y:217.6
+  { top: '44.02%', left: '40.94%', transform: 'translate(-50%, -100%)' }, // Wick 7 — x:204.7 y:220.1
 ];
 
 interface OilLampProps {
@@ -31,8 +31,8 @@ export default function OilLamp({ litWicks, onWickClick, allLit }: OilLampProps)
       <div
         className="relative mx-auto"
         style={{
-          width: 'min(600px, 100vw)',
-          height: 'min(600px, 100vw)',
+          width: 'min(600px, 100%)',
+          aspectRatio: '1 / 1',
         }}
       >
         {/* The real lamp image */}
