@@ -25,30 +25,32 @@ interface OilLampProps {
 
 export default function OilLamp({ litWicks, onWickClick, allLit }: OilLampProps) {
   return (
-    <div className="relative flex items-center justify-center w-full">
+    /* Outer wrapper: full-width, centers the lamp horizontally */
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
 
-      {/* Lamp container — responsive: full-width on mobile, capped at 600px on desktop */}
+      {/* Lamp container: sized by the image, capped at 600px, shrinks on mobile */}
       <div
-        className="relative mx-auto"
         style={{
+          position: 'relative',
           width: 'min(600px, 100%)',
-          aspectRatio: '1 / 1',
         }}
       >
-        {/* The real lamp image */}
+        {/* The real lamp image — drives container height naturally */}
         <Image
           src="/lamp.png"
           alt="Traditional Sri Lankan Brass Oil Lamp (Pahana)"
-          fill
-          sizes="(max-width: 768px) 100vw, 600px"
+          width={500}
+          height={500}
+          priority
           style={{
-            objectFit: 'contain',
+            width: '100%',
+            height: 'auto',
+            display: 'block',
             filter: allLit
               ? 'drop-shadow(0 0 30px rgba(245,200,66,0.8)) drop-shadow(0 0 12px rgba(249,115,22,0.6)) brightness(1.2) saturate(1.4)'
               : 'drop-shadow(0 0 10px rgba(245,200,66,0.4)) brightness(1.0) saturate(1.1)',
             transition: 'filter 1s ease',
           }}
-          priority
         />
 
         {/* Wick overlay — positioned precisely on each star tip */}
@@ -59,6 +61,7 @@ export default function OilLamp({ litWicks, onWickClick, allLit }: OilLampProps)
             isLit={litWicks.has(i)}
             onClick={() => onWickClick(i)}
             style={{
+              position: 'absolute',
               top: pos.top,
               left: pos.left,
               transform: pos.transform,
@@ -70,4 +73,3 @@ export default function OilLamp({ litWicks, onWickClick, allLit }: OilLampProps)
     </div>
   );
 }
-
