@@ -98,7 +98,7 @@ export default function Celebration({ show }: CelebrationProps) {
               animate={{ scale: [1, 1.03, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
-              සුභ අලුත් අවුරුද්දක් වේවා !
+              සුබ අලුත් අවුරුද්දක් වේවා !
             </motion.p>
 
             <div className="mt-4 text-sm" style={{ color: 'rgba(245,200,66,0.6)', fontFamily: 'var(--font-cinzel)' }}>
