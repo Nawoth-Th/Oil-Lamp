@@ -218,7 +218,7 @@ export default function Home() {
             <span>✦</span>
             <div style={{ height: '1px', width: '40px', background: 'linear-gradient(to left, transparent, rgba(245,200,66,0.2))' }} />
           </div>
-          AWRUDU UTHSAWAYA · SRI LANKA · 2026
+          Built with ❤️ - SRI LANKA · 2026
         </motion.footer>
       </div>
 
