@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ─── */
+:root {
+  --gold: #f5c842;
+  --gold-light: #fde68a;
+  --gold-pale: #fffbeb;
+  --amber: #d97706;
+  --orange: #ea580c;
+  --red-deep: #7f1d1d;
+  --bg-deep: #0f0500;
+  --bg-mid: #1c0a00;
+  --bg-glow: #3d1400;
+  --flame-core: #fffde7;
+  --flame-mid: #fbbf24;
+  --flame-outer: #f97316;
+  --flame-tip: rgba(251, 146, 60, 0);
+}
+
+/* ─── Base ─── */
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-deep);
+  color: var(--gold-light);
+  font-family: var(--font-cinzel), serif;
+  overflow-x: hidden;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--amber); border-radius: 3px; }
+
+/* ─── Animated Background ─── */
+.bg-mandala {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 80%, rgba(234, 88, 12, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 20%, rgba(245, 200, 66, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, #0f0500 0%, #1c0a00 40%, #0f0500 100%);
+  z-index: 0;
+}
+
+.bg-pattern {
+  position: fixed;
+  inset: 0;
+  opacity: 0.04;
+  background-image:
+    repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 30deg, rgba(245,200,66,0.5) 30deg, rgba(245,200,66,0.5) 31deg),
+    repeating-conic-gradient(from 15deg at 50% 50%, transparent 0deg, transparent 30deg, rgba(234,88,12,0.4) 30deg, rgba(234,88,12,0.4) 31deg);
+  background-size: 120px 120px;
+  z-index: 0;
+  animation: patternRotate 60s linear infinite;
+}
+
+@keyframes patternRotate {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Flame Animations ─── */
+@keyframes flicker {
+  0%   { transform: scaleX(1) scaleY(1) translateY(0); opacity: 1; }
+  20%  { transform: scaleX(0.92) scaleY(1.05) translateY(-1px); opacity: 0.97; }
+  40%  { transform: scaleX(1.05) scaleY(0.97) translateY(1px); opacity: 0.95; }
+  60%  { transform: scaleX(0.95) scaleY(1.08) translateY(-2px); opacity: 0.98; }
+  80%  { transform: scaleX(1.03) scaleY(0.94) translateY(0px); opacity: 0.96; }
+  100% { transform: scaleX(1) scaleY(1) translateY(0); opacity: 1; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { filter: blur(8px); opacity: 0.7; }
+  50%       { filter: blur(14px); opacity: 1; }
+}
+
+@keyframes lightUp {
+  0%   { transform: scaleY(0) translateY(20px); opacity: 0; }
+  60%  { transform: scaleY(1.2) translateY(-4px); opacity: 1; }
+  100% { transform: scaleY(1) translateY(0); opacity: 1; }
+}
+
+/* ─── Celebration ─── */
+
+@keyframes messageSlideIn {
+  0%   { transform: translateY(40px) scale(0.8); opacity: 0; }
+  70%  { transform: translateY(-6px) scale(1.04); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ─── Gold shimmer text ─── */
+.shimmer-text {
+  background: linear-gradient(90deg, var(--gold) 25%, #fff8e1 50%, var(--gold) 75%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
