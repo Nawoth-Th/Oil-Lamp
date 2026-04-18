@@ -25,12 +25,15 @@ interface OilLampProps {
 
 export default function OilLamp({ litWicks, onWickClick, allLit }: OilLampProps) {
   return (
-    <div className="relative flex items-center justify-center">
+    <div className="relative flex items-center justify-center w-full">
 
-      {/* Lamp container - 1:1 Aspect Ratio exactly matching 500x500 image */}
+      {/* Lamp container — responsive: full-width on mobile, capped at 600px on desktop */}
       <div
-        className="relative"
-        style={{ width: '600px', height: '600px' }}
+        className="relative mx-auto"
+        style={{
+          width: 'min(600px, 100vw)',
+          height: 'min(600px, 100vw)',
+        }}
       >
         {/* The real lamp image */}
         <Image
