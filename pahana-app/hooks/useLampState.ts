@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import Pusher from 'pusher-js';
 
 interface LampState {
   litWicks: Set<number>;
@@ -12,59 +13,76 @@ interface LampState {
 export function useLampState(totalWicks: number): LampState {
   const [litWicks, setLitWicks] = useState<Set<number>>(new Set());
   const [isConnected, setIsConnected] = useState(false);
-  const wsRef = useRef<WebSocket | null>(null);
 
+  // Initialize and Fetch Initial State
   useEffect(() => {
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const host = window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname;
-    const wsPort = process.env.NEXT_PUBLIC_WS_PORT || '3001';
-    const url = `${protocol}://${host}:${wsPort}`;
-    let ws: WebSocket;
-    let reconnectTimeout: ReturnType<typeof setTimeout>;
+    // 1. Fetch current state from API on load
+    fetch('/api/lamp')
+      .then(res => res.json())
+      .then(data => {
+        if (data.litWicks) {
+          setLitWicks(new Set(data.litWicks));
+        }
+      })
+      .catch(err => console.error('> Failed to fetch initial state:', err));
 
-    const connect = () => {
-      ws = new WebSocket(url);
-      wsRef.current = ws;
+    // 2. Setup Pusher for real-time updates
+    const pusherKey = process.env.NEXT_PUBLIC_PUSHER_APP_KEY;
+    const cluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
-      ws.onopen = () => setIsConnected(true);
-      ws.onclose = () => {
-        setIsConnected(false);
-        reconnectTimeout = setTimeout(connect, 2000);
-      };
-      ws.onerror = () => ws.close();
+    if (!pusherKey || !cluster) {
+      console.warn('> Pusher keys missing. Real-time sync disabled.');
+      return;
+    }
 
-      ws.onmessage = (event) => {
-        try {
-          const msg = JSON.parse(event.data);
-          if (msg.type === 'SYNC' && Array.isArray(msg.litWicks)) {
-            setLitWicks(new Set<number>(msg.litWicks as number[]));
-          }
-        } catch { /* ignore */ }
-      };
-    };
+    const pusher = new Pusher(pusherKey, {
+      cluster: cluster,
+    });
 
-    connect();
+    const channel = pusher.subscribe('lamp-channel');
+    
+    pusher.connection.bind('connected', () => setIsConnected(true));
+    pusher.connection.bind('disconnected', () => setIsConnected(false));
+
+    channel.bind('sync-event', (data: { litWicks: number[] }) => {
+      setLitWicks(new Set(data.litWicks));
+    });
+
     return () => {
-      clearTimeout(reconnectTimeout);
-      ws.close();
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
     };
   }, []);
 
-  const lightWick = useCallback((id: number) => {
-    // Optimistic local update: add immediately
+  // Update via API
+  const lightWick = useCallback(async (id: number) => {
+    // Optimistic local update
     setLitWicks(prev => new Set([...prev, id]));
 
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify({ type: 'LIGHT_WICK', wickId: id }));
+    try {
+      await fetch('/api/lamp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'LIGHT_WICK', wickId: id }),
+      });
+    } catch (err) {
+      console.error('> Failed to light wick via API:', err);
     }
   }, []);
 
-  const resetWicks = useCallback(() => {
-    // Optimistic local update: clear immediately
+  const resetWicks = useCallback(async () => {
+    // Optimistic local update
     setLitWicks(new Set());
 
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify({ type: 'RESET' }));
+    try {
+      await fetch('/api/lamp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'RESET' }),
+      });
+    } catch (err) {
+      console.error('> Failed to reset wicks via API:', err);
     }
   }, []);
 
